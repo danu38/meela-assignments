@@ -1,3 +1,51 @@
+# Meela Intake – Frontend (React + Vite)
+
+A tiny multi-step **client intake form** with **autosave** and **resume via UUID**.  
+Talks to the backend at `/api/*` (proxied to `http://localhost:3005` in dev).
+
+---
+
+## Quick start
+
+Prereqs:
+- Node.js ≥ 18
+- Backend running locally on **port 3005** (`cargo run` in `backend/`)
+
+Run:
+```bash
+cd frontend
+npm install
+npm run dev
+# open http://localhost:5173
+
+
+# Meela Intake – Backend (Poem + MongoDB)
+
+Small REST API that supports **partial save + resume** for a multi-step intake form.
+
+- **Framework:** [Poem]
+- **Language:** Rust (Tokio async)
+- **DB:** MongoDB Atlas
+- **Style:** No auth, UUID in URL, JSON blob payloads
+
+---
+
+## Quick start
+
+```bash
+# 0) In the backend folder, create a .env file (see below)
+cp .env.example .env   # if you have one, otherwise create it manually , I will send you the .env file seperatly
+
+# 1) Run the API
+cargo run
+
+# 2) Health check (new terminal)
+curl http://localhost:3005/api/health
+# -> ok
+
+```
+
+
 # Take-home task: Client Onboarding Form
 
 ## Background
@@ -69,22 +117,4 @@ Remember, focus on the core "resume" functionality - that is what we are evaluat
 reviewing your submission!
 
 
-# Meela Intake – Frontend (React + Vite)
 
-A tiny multi-step **client intake form** with **autosave** and **resume via UUID**.  
-Talks to the backend at `/api/*` (proxied to `http://localhost:3005` in dev).
-
----
-
-## Quick start
-
-Prereqs:
-- Node.js ≥ 18
-- Backend running locally on **port 3005** (`cargo run` in `backend/`)
-
-Run:
-```bash
-cd frontend
-npm install
-npm run dev
-# open http://localhost:5173
