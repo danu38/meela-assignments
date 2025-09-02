@@ -67,3 +67,24 @@ choices than what has been made in the `/backend` directory)
 
 Remember, focus on the core "resume" functionality - that is what we are evaluating. We look forward to catching up and
 reviewing your submission!
+
+
+# Meela Intake – Frontend (React + Vite)
+
+A tiny multi-step **client intake form** with **autosave** and **resume via UUID**.  
+Talks to the backend at `/api/*` (proxied to `http://localhost:3005` in dev).
+
+---
+
+## Quick start
+
+Prereqs:
+- Node.js ≥ 18
+- Backend running locally on **port 3005** (`cargo run` in `backend/`)
+
+Run:
+```bash
+cd frontend
+npm install
+npm run dev
+# open http://localhost:5173
