@@ -43,7 +43,7 @@ export default function IntakeForm() {
   const [saving, setSaving] = useState(false);
   const dirtyRef = useRef(false);
 
-/* dirtyRef.current = true : the form has changes that haven’t been saved yet.
+  /* dirtyRef.current = true : the form has changes that haven’t been saved yet.
 
 dirtyRef.current = false :all changes are persisted to the backend. */
 
@@ -68,7 +68,7 @@ dirtyRef.current = false :all changes are persisted to the backend. */
 
   // Debounced autosave :delay execution of a function until a 600ms time has passed since the last call
 
-/*   Every time the user types, you call queueSave(nextForm).
+  /*   Every time the user types, you call queueSave(nextForm).
 
 It cancels the old timer, starts a new one.
 
@@ -78,13 +78,13 @@ useMemo makes sure this logic is stable between renders. */
   const queueSave = useMemo(
     () => (next) => {
       dirtyRef.current = true;
-      if (timer.current) clearTimeout(timer.current);// reset old timer
+      if (timer.current) clearTimeout(timer.current); // reset old timer
       timer.current = setTimeout(async () => {
         setSaving(true);
         try {
           await patchDraft(id, { data: next, step }); // save to backend
         } finally {
-          setSaving(false);// saved
+          setSaving(false); // saved
           dirtyRef.current = false;
         }
       }, 600); //wait 600ms after the last keystroke, then save
@@ -128,12 +128,12 @@ useMemo makes sure this logic is stable between renders. */
   };
 
   const canProceed = () => {
-  if (step === 0) return form.fullName.trim() && form.email.trim();
-  if (step === 1) return form.mainConcern.trim();
-  if (step === 2) return form.goals.trim();
-  if (step === 3) return form.background?.trim();
-  return true;
-};
+    if (step === 0) return form.fullName.trim() && form.email.trim();
+    if (step === 1) return form.mainConcern.trim();
+    if (step === 2) return form.goals.trim();
+    if (step === 3) return form.background?.trim();
+    return true;
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -155,23 +155,36 @@ useMemo makes sure this logic is stable between renders. */
     );
   if (status === "submitted") {
     return (
-      <div style={box}>
-        <h3>Thanks you for submitting the form</h3>
+      <div className="container">
+        <h3 className="h1">Thanks!</h3>
         <p>Your intake was submitted.</p>
-        <Link to="/">Back to start</Link>
+        <Link to="/" className="btn btn-outline">
+          Back to start
+        </Link>
       </div>
     );
   }
 
   return (
-    <div style={box}>
-      <div style={row}>
-        <h3 style={{ margin: 0 }}>
-          Step {step + 1} — {steps[step].title}
-        </h3>
+    <div className="container">
+      <div className="toprow">
         <div>
+          <div className="h2">
+            Step {step + 1} — {steps[step].title}
+          </div>
+          <div className="stepper">
+            {steps.map((_, i) => (
+              <div key={i} className={`step ${i <= step ? "active" : ""}`} />
+            ))}
+          </div>
+        </div>
+        <div className="badge">
           {saving ? "Saving…" : "Saved"}{" "}
-          <button onClick={saveAndExit} type="button">
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={saveAndExit}
+          >
             Save & Exit
           </button>
         </div>
@@ -180,76 +193,64 @@ useMemo makes sure this logic is stable between renders. */
       <form
         onSubmit={onSubmit}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && e.target.tagName === "INPUT") {
+          if (e.key === "Enter" && e.target.tagName === "INPUT")
             e.preventDefault();
-          }
         }}
       >
         {step === 0 && (
           <>
-            <label>
-              Full name
-              <br />
-              <input
-                value={form.fullName}
-                onChange={(e) => onChange({ fullName: e.target.value })}
-                placeholder="daniel smith"
-              />
-            </label>
-            <br />
-            <br />
-            <label>
-              Email
-              <br />
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => onChange({ email: e.target.value })}
-                placeholder="daneiel@gmail.com"
-              />
-            </label>
+            <label>Full name</label>
+            <input
+              className="input"
+              value={form.fullName}
+              onChange={(e) => onChange({ fullName: e.target.value })}
+              placeholder="Danu Smith"
+            />
+
+            <label>Email</label>
+            <input
+              className="input"
+              type="email"
+              value={form.email}
+              onChange={(e) => onChange({ email: e.target.value })}
+              placeholder="danu@gmail.com"
+            />
           </>
         )}
 
         {step === 1 && (
           <>
-            <label>
-              What brings you to therapy right now?
-              <br />
-              <textarea
-                rows="5"
-                value={form.mainConcern}
-                onChange={(e) => onChange({ mainConcern: e.target.value })}
-              />
-            </label>
+            <label>What brings you to therapy right now?</label>
+            <textarea
+              className="textarea"
+              rows="5"
+              value={form.mainConcern}
+              onChange={(e) => onChange({ mainConcern: e.target.value })}
+            />
           </>
         )}
 
         {step === 2 && (
           <>
-            <label>
-              What would you like to get out of therapy?
-              <br />
-              <textarea
-                rows="5"
-                value={form.goals}
-                onChange={(e) => onChange({ goals: e.target.value })}
-              />
-            </label>
+            <label>What would you like to get out of therapy?</label>
+            <textarea
+              className="textarea"
+              rows="5"
+              value={form.goals}
+              onChange={(e) => onChange({ goals: e.target.value })}
+            />
           </>
         )}
 
         {step === 3 && (
           <>
-            <label>
-              Please tell us a little about your background
-              <br />
-              <textarea
-                rows="5"
-                value={form.background}
-                onChange={(e) => onChange({ background: e.target.value })}
-              />
-            </label>
+            <label>Please tell us a little about your background</label>
+            <textarea
+              className="textarea"
+              rows="5"
+              value={form.background}
+              onChange={(e) => onChange({ background: e.target.value })}
+            />
           </>
         )}
         <div
@@ -259,17 +260,38 @@ useMemo makes sure this logic is stable between renders. */
             justifyContent: "space-between",
           }}
         >
-          <button type="button" onClick={() => moveSteps(-1)} disabled={step === 0}>
-            Back
-          </button>
+<div className="actions">
+  {/* Back button */}
+  <button
+    type="button"
+    className="btn btn-outline"
+    onClick={() => moveSteps(-1)}
+    disabled={step === 0}
+  >
+    Back
+  </button>
+
           {step < steps.length - 1 ? (
-            <button type="button" onClick={() => moveSteps(+1)} disabled={!canProceed()} title={!canProceed() ? "Please fill required fields" : ""}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => moveSteps(+1)}
+              disabled={!canProceed()}
+              title={!canProceed() ? "Please fill required fields" : ""}
+            >
               Next
             </button>
           ) : (
-            <button type="submit" disabled={!canProceed()}>Submit</button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!canProceed()}
+              title={!canProceed() ? "Please fill required fields" : ""}
+            >
+              Submit
+            </button>
           )}
-        </div>
+        </div></div>
       </form>
 
       <p style={{ opacity: 0.7, marginTop: 12 }}>
