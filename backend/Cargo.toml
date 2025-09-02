@@ -9,6 +9,10 @@ env_logger = "0.11.8"
 log = "0.4.27"
 poem = { version = "3.1.11", features = ["static-files"] }
 serde = "1.0.219"
-sqlx = { version = "0.8.6", features = ["sqlite", "runtime-tokio"] }
+serde_json = "1"                      # JSON values in memory
 thiserror = "2.0.12"
 tokio = { version = "1.45.1", features = ["full"] }
+uuid = { version = "1", features = ["v4"] }       # UUID for resume links -unique resume link per client (core requirement)."v4" → generate random UUIDs.
+time = { version = "0.3", features = ["formatting", "parsing"] }# RFC3339 timestamps -store/save when the form was last updated
+mongodb = "2.8"                                                       # Mongo driver
+bson = "2.13"                                                         # BSON helpers
