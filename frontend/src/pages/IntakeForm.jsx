@@ -41,6 +41,7 @@ export default function IntakeForm() {
   const [status, setStatus] = useState("draft");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const dirtyRef = useRef(false);
 
   /* dirtyRef.current = true : the form has changes that haven’t been saved yet.
@@ -48,6 +49,7 @@ export default function IntakeForm() {
 dirtyRef.current = false :all changes are persisted to the backend. */
 
   const timer = useRef(null);
+  const emailIsValid = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   // Load existing draft
   useEffect(() => {
@@ -128,11 +130,25 @@ useMemo makes sure this logic is stable between renders. */
   };
 
   const canProceed = () => {
-    if (step === 0) return form.fullName.trim() && form.email.trim();
+    if (step === 0) {
+      const nameOk = form.fullName.trim().length > 0;
+      const emailOk = emailIsValid(form.email);
+      return nameOk && emailOk;
+    }
     if (step === 1) return form.mainConcern.trim();
     if (step === 2) return form.goals.trim();
     if (step === 3) return form.background?.trim();
     return true;
+  };
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    onChange({ email: value });
+
+    if (!emailIsValid(value)) {
+      setError("Please enter a valid email");
+    } else {
+      setError("");
+    }
   };
 
   const onSubmit = async (e) => {
@@ -212,9 +228,11 @@ useMemo makes sure this logic is stable between renders. */
               className="input"
               type="email"
               value={form.email}
-              onChange={(e) => onChange({ email: e.target.value })}
+              onChange={handleEmailChange}
               placeholder="danu@gmail.com"
+              required
             />
+            {error && <p style={{ color: "red" }}>{error}</p>}
           </>
         )}
 
@@ -260,38 +278,39 @@ useMemo makes sure this logic is stable between renders. */
             justifyContent: "space-between",
           }}
         >
-<div className="actions">
-  {/* Back button */}
-  <button
-    type="button"
-    className="btn btn-outline"
-    onClick={() => moveSteps(-1)}
-    disabled={step === 0}
-  >
-    Back
-  </button>
-
-          {step < steps.length - 1 ? (
+          <div className="actions">
+            {/* Back button */}
             <button
               type="button"
-              className="btn btn-primary"
-              onClick={() => moveSteps(+1)}
-              disabled={!canProceed()}
-              title={!canProceed() ? "Please fill required fields" : ""}
+              className="btn btn-outline"
+              onClick={() => moveSteps(-1)}
+              disabled={step === 0}
             >
-              Next
+              Back
             </button>
-          ) : (
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!canProceed()}
-              title={!canProceed() ? "Please fill required fields" : ""}
-            >
-              Submit
-            </button>
-          )}
-        </div></div>
+
+            {step < steps.length - 1 ? (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => moveSteps(+1)}
+                disabled={!canProceed()}
+                title={!canProceed() ? "Please fill required fields" : ""}
+              >
+                Next
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!canProceed()}
+                title={!canProceed() ? "Please fill required fields" : ""}
+              >
+                Submit
+              </button>
+            )}
+          </div>
+        </div>
       </form>
 
       <p style={{ opacity: 0.7, marginTop: 12 }}>
